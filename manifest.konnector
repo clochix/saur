@@ -1,0 +1,115 @@
+{
+  "version": "1.4.0",
+  "name": "SAUR",
+  "type": "konnector",
+  "language": "node",
+  "icon": "icon.svg",
+  "slug": "saur",
+  "source": "git://github.com/konnectors/saur",
+  "editor": "Marc Polycarpe",
+  "vendor_link": "https://www.saurclient.fr/",
+  "categories": [
+    "energy"
+  ],
+  "fields": {
+    "login": {
+      "type": "email"
+    },
+    "password": {
+      "type": "password"
+    },
+    "advancedFields": {
+      "folderPath": {
+        "advanced": true,
+        "isRequired": false
+      }
+    }
+  },
+  "data_types": [
+    "bill"
+  ],
+  "screenshots": [],
+  "permissions": {
+    "bank operations": {
+      "type": "io.cozy.bank.operations"
+    },
+    "carbon_copy": {
+      "type": "io.cozy.certified.carbon_copy"
+    },
+    "bills": {
+      "type": "io.cozy.bills"
+    },
+    "files": {
+      "type": "io.cozy.files"
+    },
+    "accounts": {
+      "type": "io.cozy.accounts",
+      "verbs": [
+        "GET"
+      ]
+    }
+  },
+  "developer": {
+    "name": "Marc Polycarpe",
+    "url": "https://cozy.io"
+  },
+  "langs": [
+    "fr",
+    "en"
+  ],
+  "locales": {
+    "fr": {
+      "short_description": "Connecteur pour la SAUR (Eau)",
+      "long_description": "Ce connecteur récupère les factures d'eau de la SAUR",
+      "permissions": {
+        "bank operations": {
+          "description": "Utilisé pour relier les factures à des operations bancaires"
+        },
+        "carboncopy": {
+          "description": "Utilisé pour certifier vos fichier copie conforme avec les documents d'origine"
+        },
+        "bills": {
+          "description": "Utilisé pour sauver les données des factures"
+        },
+        "files": {
+          "description": "Utilisé pour sauvegarder les factures"
+        },
+        "accounts": {
+          "description": "Utilisé pour obtenir les données du compte"
+        }
+      }
+    },
+    "en": {
+      "short_description": "SAUR Connector",
+      "long_description": "This template fetches bills from SAUR (water provider in France)",
+      "permissions": {
+        "bank operations": {
+          "description": "Required to link bank operations to bills"
+        },
+        "carboncopy": {
+          "description": "Required for carbon copy documents"
+        },
+        "bills": {
+          "description": "Required to save the bills data"
+        },
+        "files": {
+          "description": "Required to save the bills"
+        },
+        "accounts": {
+          "description": "Required to get the account's data"
+        }
+      }
+    }
+  },
+  "qualification_labels": [
+    "water_invoice"
+  ],
+  "features": [
+    "DOC_QUALIFICATION_V2",
+    "SENTRY_V2",
+    "CARBON_COPY",
+    "METADATA_DEDUP"
+  ],
+  "banksTransactionRegExp": "\\bsaur\\b",
+  "manifest_version": "2"
+}

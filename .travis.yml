@@ -1,0 +1,41 @@
+language: node_js
+node_js:
+- '16.20.2'
+env:
+  global:
+  - MATTERMOST_CHANNEL=publication
+  # REGISTRY_TOKEN(editor=cozy, app=saur)
+  - secure: ZVQg4vRJx9Cs0d8yndE1BsNv+g9dzAR5TTph+i9npHP0BPjsExLFro5EJqnbDwp/CSlnP//GFPwxhhMWOtyrKx3oSFM2JF2ejw3xgA9sW1YGzxxjArPUvCjgUgJq+6ozWTtFsg0oWKi0UFkOMZ2gRkr199sODjLGGxXNF5i3CHZUjC0WW9Y3WwwbqZDkCSlc1XhqGhjboeoG+OGSSwfdYolJtHKW53xxDJwNbgkZ9sqFwGQfHm2zoD9Rlx35GrBMpG0jkhbt0nw19RTEnp8+zaDt+ndhIFKNOtDbubAkZ+H0XXd0Ct4oHJhCErk7LYyWGkPEBTEhRlmDPVv8UatbaJiqmfUjKlMBTtbW0DzcSK9jYS39xcAkcb0lokCOE0G1+0uhcKDCKszVehH//2S/fL8uptemS2hDwAprHmqngNhHWOwulKhqxNDd93dhCD6Ier2MxOStponYTnLItwz6u+9FF5K5DitVZiRRxqJcV1bs0dvFnJKPl8x9EV4YGBlJvOKpjHf2IvUzOaDEVQbg0Pyc6GFu27hhDdxkhJV3CkOMTFWav6FNPxQujpXAq170ZRpue6Z671XUSov/tHLtg5sJRP55IO9pZcjTRozNyftgE1fOK6wrS80s6KTT2Cj9AsZYfnSIMCX27qpnMJaNLw2FcAaGcapDFGBGyPnakiw=
+  # MATTERMOST_HOOK_URL
+  - secure: qsbmWh8GDxSJWPr5tsQYe13mOHoOwFr6eHvGN6URFg6ElM6weGoX700cBrDvDke7q28z1UdqMQ0snxVDtWnEEBmfDZ6nPkXPjYA/ZnE/OP518o/7TRkbe01jpmY3oKmLa3rYjhNhDJnT12Hae4aUHNtOX255tJSLHiDd8ii1jLBqZwOpGoemWE0BkyLnNtpreW4crOg/LORRZ8RjG0jPAb4k+N++Wyl+Tde4t+TpIB9gxuvwibEYMobeOQJne4CLe0rgghulPWL109pXjK7d0WZEPmOYr/ojSYWwJrgj3IWuJ1WxZgTe/9FmOUo22qj2FjqaY/W4bslD9Ghr3E24/+sZhVqAi/5bi+mm5aP+V4WTKNaVkipy35U9TmCb/ytIFBCvReaoZAaLU/62CnhCCYFBDZCO8rFKPp5MUip8/bzIJWlHRjRNr073y4hCqETJv4/WOfZKXY/X8++nKzkp+3hLN9JMkoxBgz96vpFe1arPmoVE6C0JzcGg9eBUlfJ6rY0b3y4MhrEu3bGrvMlNKBxxo3bSV6XrITWXegvmG7NlazsV+zKGsKcmXGOo6vOGKOOd5yr/S+r71YGGoJ08GT1RW6SXFbRPhSAWiB7Mpguz7PqV/YHjkBXhDL5oSxx3CXFUTflOn8WDAXOltk9n7561DR4W/xocIAhbO3M6vzA=
+cache:
+  yarn: true
+  directories:
+  - node_modules
+branches:
+  except:
+  - build
+  - build-debug
+script:
+- yarn lint
+- yarn build
+deploy:
+- provider: script
+  skip-cleanup: true
+  script: DEPLOY_BRANCH=build yarn deploy && yarn cozyPublish
+  on:
+    branch: master
+- provider: script
+  skip-cleanup: true
+  script: DEPLOY_BRANCH=build yarn deploy && yarn cozyPublish --postpublish mattermost
+  on:
+    tags: true
+before_install:
+- openssl aes-256-cbc -K $encrypted_8ebb1ef83f64_key -iv $encrypted_8ebb1ef83f64_iv
+  -in github_deploy_key.enc -out /tmp/github_deploy_key -d
+- eval "$(ssh-agent -s)"
+- chmod 600 /tmp/github_deploy_key
+- ssh-add /tmp/github_deploy_key
+after_deploy:
+- rm /tmp/github_deploy_key
+- ssh-add -D
